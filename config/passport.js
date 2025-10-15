@@ -3,6 +3,12 @@ const GoogleStrategy= require('passport-google-oauth20').Strategy;
 const config= require('./index');
 const User= require("../Models/userModels");
 
+
+console.log("=== Passport Config Loading ===");
+console.log("Google Client ID:", config.google.clientId);
+console.log("Google Client Secret:", config.google.clientSecret);
+console.log("Google Redirect URI:", config.google.redirectUri);
+
 passport.use(new GoogleStrategy({
     clientID: config.google.clientId,
     clientSecret: config.google.clientSecret,

@@ -1,9 +1,14 @@
-require("dotenv").config()
+const config = require("../config/index")
+
 const User= require("../Models/userModels")
 const {CustomAPIError, AuthenticationError} = require("../errors")
 const {StatusCodes}= require("http-status-codes")
 const jwt = require("jsonwebtoken")
 
+
+const generateToken =(user)=>{
+    return jwt.sign({userId:user._id}, config.jwt.secret, {expiresIn:"20d"})
+}
 const createUser= async(req,res)=>{
      const{name, email, password}= req.body
      const alreadyExists= await User.findOne({email})
@@ -37,20 +42,24 @@ const userLogin = async(req, res)=>{
     if(!isMatch){
         throw new AuthenticationError("invalid sign-in credentials")
     }
-    const token = jwt.sign({
-      userId: user._id},
-    process.env.TOKEN,
-    {expiresIn:"20d"})
+    const token = generateToken(user)
+  
     res.status(StatusCodes.OK).json({msg:"login successful", token})
 }
 
 const googleSuccess= (req,res)=>{
+  console.log("req.isAuthenticated():", req.isAuthenticated()); // Log authentication status
+  console.log("req.user:", req.user); // Log the user object
   if(!req.user){
     return res.redirect("/api/v1/users/auth/failure")
   }
-  res.status(StatusCodes.OK).json({
+ /* const token = generateToken(req.user)
+  console.log("Generated JWT Token:", token); // Log the generated token for debugging
+  */
+    res.status(StatusCodes.OK).json({
     msg:"login successful",
-    user:req.user
+    user:req.user,
+    token: token  
   })
   }
 

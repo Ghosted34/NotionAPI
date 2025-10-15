@@ -23,16 +23,13 @@ const config= {
     db:{
         uri: process.env.MONGO_URI
     },
-    session:{
-        secret:process.env.SESSION_SECRET,
-    },
     jwt:{
         secret:process.env.JWT_SECRET
     }, 
     google:{
         clientId:process.env.OAUTH_CLIENT_ID,
         clientSecret:process.env.OAUTH_CLIENT_SECRET,
-        redirectUri: process.env.OAUTH_REDIRECT_URL
+        redirectUri: process.env.OAUTH_REDIRECT_URI
     },
     session:{
         secret:process.env.SESSION_SECRET

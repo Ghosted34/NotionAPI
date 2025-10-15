@@ -1,9 +1,7 @@
 
-//require("express-async-errors")
-require("./config/passport")
 const express = require ("express")
 const connectdb = require("./db")
-const passport= require("passport")
+const passport= require('./config/passport'); 
 const session = require("express-session")
 const crypto= require("crypto")
 const config = require("./config/index")
@@ -25,7 +23,7 @@ const errorHandler =require("./middleware/errorHandler")
 app.use(session({
 secret: config.session.secret,
 resave: false,
-saveUninitialized: true,
+saveUninitialized: false,
 cookie: { 
    secure: false,
    httpOnly: true,
@@ -40,11 +38,13 @@ app.use("/health", (req,res)=>{
       timestamp: new Date().toISOString()
    })
 })
+
+
+app.use(express.json())
 app.use(passport.initialize())
 app.use(passport.session())
 
 
-app.use(express.json())
 
 app.use("/api/v1/task", TaskRoutes)
 app.use("/api/v1/users", userRoutes)

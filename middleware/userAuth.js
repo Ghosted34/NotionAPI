@@ -1,4 +1,4 @@
-require("dotenv").config()
+const config = require("../config/index")
 const jwt = require("jsonwebtoken")
 
 const {CustomAPIError, AuthenticationError} = require("../errors")
@@ -13,7 +13,7 @@ const authMiddleware= async(req,res, next)=>{
     }
     const token = authHeader.split(" ")[1]
     try{
-        const decoded= jwt.verify(token, process.env.TOKEN)
+        const decoded= jwt.verify(token,  config.jwt.secret)
         const user = await  User.findById(decoded.userId)
         if(!user){
             throw new AuthenticationError("User not found", StatusCodes.UNAUTHORIZED)
@@ -38,6 +38,7 @@ const authMiddleware= async(req,res, next)=>{
 
 const ensureAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
+        console.log("Authenticated user:", req.user);
         return next();
 
     }
