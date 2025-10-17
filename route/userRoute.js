@@ -16,7 +16,7 @@ router.get("/auth/google/callback",
        console.log("=== Google callback route hit ===");
        console.log("req.query:", req.query);
        console.log("req.user before authenticate:", req.user);
-    
+    next();
     },
      passport.authenticate("google",{ failureRedirect:"/auth/google/failure" }),
      (req, res) => {
@@ -24,6 +24,20 @@ router.get("/auth/google/callback",
     res.redirect('/profile');
   }
 )
+
+//Try this also
+//Cleaner version of above
+
+//router.get("/auth/google/callback",
+//passport.authenticate("google",{ failureRedirect:"/auth/google/failure" }),
+//     (req, res) => {
+//     console.log(req.uer)
+//    // Successful authentication
+//    res.redirect('/profile');
+//  }
+//)
+
+
 router.get("/auth/google/failure", googleFailure)
 
 
